@@ -173,8 +173,6 @@ Output: Dom elements
 -----------------------------------------------------------------------------*/  
     function generateList(todo_object_arr) {
 
-        console.log('in generateList')
-        for (var i = 0; i < todo_object_arr.data.length; i++) {
 
         console.log('in generateList');
         console.log('todo_object_arr: ', todo_object_arr);
@@ -280,11 +278,6 @@ Output: New dom elements and new object in the object array.
                     }
 
         })
-
-
-
-       
-
             $('#new_title').val(null);
             $('#new_details').val(null);
     }
@@ -353,7 +346,7 @@ function accountCreate() {
         url: 'http://s-apis.learningfuze.com/todo/newAccount',
         dataType: 'json',
         data: ""
-    })
+    });
 }
 
 
