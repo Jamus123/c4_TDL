@@ -335,7 +335,7 @@ function toggleButtons(){
     $('.login_logout_container').click(function(){
         console.log('in login_logout click handler')
         $('.login_logout_btn').toggleClass('clicked_btn')
-    })
+    });
 
 }
 
