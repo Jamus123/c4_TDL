@@ -76,7 +76,7 @@ Output: response, an array of task objects
 
             url: 'http://s-apis.learningfuze.com/todo/get',
             dataType: 'json',
-            data:{user:user.id},
+            data:{userId:user.id},
             crossDomain: true,
             cache: false,
             method: 'Post',
@@ -162,7 +162,7 @@ Output: Dom elements
     function generateList(todo_object_arr) {
 
         console.log('in generateList')
-        for (var i = 0; i < todo_object_arr.length; i++) {
+        for (var i = 0; i < todo_object_arr.data.length; i++) {
             console.log('in for loop');
             var task_list_entry = $('<div>', {
                 class: 'task_list col-xs-12',
@@ -316,6 +316,22 @@ function toggleButtons(){
 
 
 
+/*--------------------------------------------------------------------------
+Function:
+Purpose:
+Input:
+Output:
+---------------------------------------------------------------------------*/
+function accountCreate() {
+    $.ajax({
+        url: 'http://s-apis.learningfuze.com/todo/newAccount',
+        dataType: 'json',
+        data: ""
+    })
+}
+
+
+
 /*---------------------------------------------------------------------------
 Function: document.ready
 Purpose: On load creates the list of objects from the server. And creates the click handlers via getServerList(), taskComplete(), deleteTask(), and showCompleted()
@@ -339,3 +355,5 @@ Output: none
         });
 
     });
+
+
