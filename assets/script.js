@@ -30,8 +30,10 @@ Output: success or failure message, on success: appends user information to the 
 -----------------------------------------------------------------------------*/    
 
      function validateUser(){
+
+
         console.log('in validateUser function');
-        username=$('#username').val();
+        username = $('#username').val();
         $.ajax({
                 url: 'http://s-apis.learningfuze.com/todo/login',
                 dataType:'json',
@@ -66,10 +68,10 @@ Output: success or failure message, on success: appends user information to the 
                     });
                     getServerList();
                     generateList();
+                }
 
         });
-
-    }
+}
 
 /*---------------------------------------------------------------------------
 Function: getServerList()
@@ -135,7 +137,14 @@ Output: none
             console.log('this: ' + $(this).attr('index_id'));
             $(target_id).remove();
             delete todo_objects[current_index];
-        })
+
+            // $.ajax({
+            //     url: "http://s-apis.learningfuze.com/todo/delete",
+            //     dataType: "json",
+            //     data: {}
+
+            // });
+        });
     }
 /*---------------------------------------------------------------------------
 Function: taskComplete()
