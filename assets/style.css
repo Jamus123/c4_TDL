@@ -29,9 +29,11 @@ html{
 body{
 	width: 500px;
 	height: 500px;
+	background-color:#F0F2EB;
 }
 
 .top_navbar {
+	background-color:#F0F2EB;
 	
 }
 
@@ -39,3 +41,23 @@ body{
 	display:none;
 }
 
+.brownline
+{
+	height:24px;
+	background-color:#FF4242;
+}
+
+.add_task_button
+{
+	background-color:#D4EE5E;
+}
+
+.login_form_button
+{
+	background-color:#FF4242;
+}
+h2
+{
+	font-family:Impact, Charcoal, sans-serif;
+	font-weight:200;
+}
