@@ -23,9 +23,7 @@ function logOut() {
     });
 
     $('.user_create_btn').html("Create User");
-    chrome.storage.clear();
-
-
+    chrome.storage.sync.clear();
 }
 
 /*---------------------------------------------------------------------------
@@ -35,11 +33,15 @@ Input: username and password
 Output: success or failure message, on success: appends user information to the top of the page
 -----------------------------------------------------------------------------*/
 
+
+
 function validateUser() {
     $('#loginmodal').on('hide.bs.modal', function(e) {
 
         e.preventDefault();
     });
+    
+    console.log('in validateUser function');
     username = $('#username').val();
     $.ajax({
         url: 'http://s-apis.learningfuze.com/todo/login',
@@ -71,78 +73,32 @@ function validateUser() {
                     id: 'email_logged_in',
                     class: 'col-xs-12',
                 })
-                $('.user_info').empty();
+
                 $('.user_info').append(name_span, email_span);
                 getServerList();
                 console.log('response: ', response);
                 $('#logout_btn').click(function() {
+                    console.log('in logout btn click handler');
                     logOut();
                     $('.user_info').remove()
 
-                });
 
-                $('#loginmodal').hide('bs.modal');
-                $('.modal-backdrop').remove();
-
-                
-                generateList();
-                getServerList(todo_objects);
-
-<<<<<<< HEAD
-=======
-     function validateUser(){
-        console.log('in validateUser function');
-        username=$('#username').val();
-        $.ajax({
-                url: 'http://s-apis.learningfuze.com/todo/login',
-                dataType:'json',
-                data:{username:$('#username').val(), password:$('#password').val()},
-                method: 'POST',
-
-                success: function(response){
-                    window.user=response;
-                    if(response.success == false){
-                        console.log('in failure');
-                        console.log('errors: ',response.errors);
-                    }
-                    var name_span = $('<span>',{
-                                        text: response.firstName + ' ' + response.lastName,
-                                        id: 'user_logged_in',
-                                        class:'col-xs-12'
-                     })
-                    var email_span = $('<span>',{
-                                        text: response.email,
-                                        id: 'email_logged_in',
-                                        class:'col-xs-12',
-                     })
-
-                     $('.user_info').append(name_span, email_span);
-                     getServerList();   
-                    console.log('response: ',response);
-                    $('#logout_btn').click(function(){
-                        console.log('in logout btn click handler');
-                        logOut();
-                        $('.user_info').remove()
-                    
-
-                    })
-                    getServerList();
-                    
-                }
-            
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
-
-
-                chrome.storage.local.set({
-                    'session_id': user.id
-                });
-                chrome.storage.local.get('session_id', function(item){
-                    console.log("this is the session id",item);
                 })
-            }
-        }
-    });
+                getServerList();
 
+            }
+
+            $('#loginmodal').hide('bs.modal');
+            $('.modal-backdrop').remove();
+
+            chrome.storage.sync.set({
+                'session_id': user.id
+            });
+            chrome.storage.sync.get('session_id', function(item) {
+                console.log("this is the session id", item);
+            })
+        }
+    })
 }
 
 /****************************
@@ -150,9 +106,9 @@ function validateUser() {
  *
  ***********************/
 
-function loggedInUserInfo() {
+// function loggedInUserInfo() {
 
-}
+// }
 
 /***************************
  * FUNCTION 
@@ -209,41 +165,22 @@ function getServerList() {
         cache: false,
         method: 'Post',
         success: function(response) {
-
-<<<<<<< HEAD
             console.log('response: ', response);
             window.todo_objects = response;
             applyPastDue();
             sortByPastDue();
             markByPastDue();
-=======
-                console.log('response: ', response);
-                window.todo_objects = response;
-                applyPastDue();
-                sortByPastDue();
-                markByPastDue();
-               
-                 $('.task_entry').click(function(){
 
+            $('.task_entry').click(function() {
 
-                    console.log('this: ', $(this));
-                    console.log("clicked");
-                    var target_id = $(this).attr('index_id');
-                    console.log(target_id);
-                    var target_details = '#task_details'+ target_id;
-                    $(target_details).toggleClass('shown_task_details');
-                    updateItem();
-                })
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
-
-            $('.task_list').click(function() {
 
                 console.log('this: ', $(this));
-
+                console.log("clicked");
                 var target_id = $(this).attr('index_id');
                 console.log(target_id);
                 var target_details = '#task_details' + target_id;
                 $(target_details).toggleClass('shown_task_details');
+                updateItem();
             });
 
         }
@@ -296,13 +233,9 @@ function deleteTask() {
 
 function taskComplete() {
         var current_index;
-<<<<<<< HEAD
-
-=======
         var compl_val;
 
         console.log('in taskComplete function');
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
         $('.task_list_container').on('click', '.completed_task', function() {
 
 
@@ -310,52 +243,28 @@ function taskComplete() {
 
             current_index = $(this).attr('index_id');
             var target_id = '#task' + current_index;
-<<<<<<< HEAD
-=======
-                // for(var i=0; i<todo_objects.data.length; i++){
-                //     if(todo_objects.data[i].complete == 1){
-                        
-                //         return;
-                //     }
-                // }
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
 
 
-
-
+            console.log('this: ' + $(this).attr('index_id'));
             $(target_id).addClass('task_details')
             $('.task_completed_container').append($(target_id));
-
+            console.log('current index: ', current_index);
             $.ajax({
-<<<<<<< HEAD
                 url: 'http://s-apis.learningfuze.com/todo/updateCompleteStatus',
                 method: 'Post',
                 dataType: 'json',
                 data: {
                     postId: current_index,
-                    complete: 1
+                    complete: compl_val
                 },
                 success: function(response) {
                     console.log('current_index: ', current_index)
                     console.log('updating task complete information');
                     console.log(response);
                 }
-            });
-        });
-
-=======
-                            url:'http://s-apis.learningfuze.com/todo/updateCompleteStatus',
-                            method: 'Post',
-                            dataType: 'json',
-                            data: {postId: current_index, complete:compl_val},
-                            success: function(response){
-                                console.log('current_index: ', current_index)
-                                console.log('updating task complete information');
-                                console.log(response);
-                            }
-                    })
+            })
         })
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
+
 
     }
     /*---------------------------------------------------------------------------
@@ -418,53 +327,29 @@ function generateList(todo_object_arr) {
 
         });
 
-
-<<<<<<< HEAD
         var details_div = $('<div>', {
             id: 'task_details' + todo_object_arr.data[i].id,
             class: 'task_details col-xs-12',
-=======
-            var details_span = $('<span>', {
-                text: todo_object_arr.data[i].details,
-                class: 'col-xs-6',
-                id: 'details_span'+ todo_object_arr.data[i].id,
-                contenteditable: 'true',
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
-
         });
-
-<<<<<<< HEAD
         var details_span = $('<span>', {
             text: todo_object_arr.data[i].details,
             class: 'col-xs-6',
+            id: 'details_span' + todo_object_arr.data[i].id,
             contenteditable: 'true',
 
         });
-=======
-            var initial_time = $('<span>', {
-                text: 'Made: ' + todo_object_arr.data[i].timeStamp,
-                class: 'col-xs-2 col-xs-offset-1',
-                id: 'initial_time_span'+ todo_object_arr.data[i].id,
-                contenteditable: 'true',
-            });
-
-            var due_time = $('<span>', {
-                text: 'Due: time_due',
-                class: 'col-xs-2 col-xs-offset-1',
-                id: 'due_time_span'+ todo_object_arr.data[i].id,
-                contenteditable: 'true',
-            });
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
 
         var initial_time = $('<span>', {
             text: 'Made: ' + todo_object_arr.data[i].timeStamp,
             class: 'col-xs-2 col-xs-offset-1',
+            id: 'initial_time_span' + todo_object_arr.data[i].id,
             contenteditable: 'true',
         });
 
         var due_time = $('<span>', {
             text: 'Due: time_due',
             class: 'col-xs-2 col-xs-offset-1',
+            id: 'due_time_span' + todo_object_arr.data[i].id,
             contenteditable: 'true',
         });
 
@@ -629,69 +514,55 @@ Input:
 Output: 
 <<<<<<< HEAD
 -----------------------------------------------------------------------------*/
-// function completeItem(){
-//     $.ajax({
-//             url: 'http://s-apis.learningfuze.com/todo/update',
-//             dataType: 'json',
-//             method: 'Post',
-//             data:{  postId: $(this).attr(index_id),
-//                     title: 
-//                     dueDate: string - any valid date format as specified in the PHP strtotime specs
-//                     details: string - todo list details
-//                     userId: number - Users ID
-//                     complete: boolean - whether the task has been completed or not}
-//     })
-// }
-=======
------------------------------------------------------------------------------*/  
-function updateItem(){
+
+function updateItem() {
     console.log('in update item')
-    $('.edit_task').click(function(){
+    $('.edit_task').click(function() {
         console.log('in edit button');
 
 
-    var pos_in_array;
-    var is_complete;
+        var pos_in_array;
+        var is_complete;
 
-    for(var i=0; i<todo_objects.data.length; i++){
-        console.log('this: ', $(this)[0].attributes.index_id.value);
-        if(todo_objects.data[i].id == $(this)[0].attributes.index_id.value){
-            pos_in_array = i;
+        for (var i = 0; i < todo_objects.data.length; i++) {
+            console.log('this: ', $(this)[0].attributes.index_id.value);
+            if (todo_objects.data[i].id == $(this)[0].attributes.index_id.value) {
+                pos_in_array = i;
+            }
         }
-    }
 
-    if(todo_objects.data[pos_in_array].complete == 0){
-        is_complete = false;
-    } else if(todo_objects.data[pos_in_array].complete == 1){
-        is_complete = true;
-    }
-    var details_span = '#details_span'+$(this)[0].attributes.index_id.value;
-    var initial_time = '#initial_time_span'+$(this)[0].attributes.index_id.value;
-    var due_time = '#due_time_span'+$(this)[0].attributes.index_id.value;
-    var id = $(this)[0].attributes.index_id.value;
-    console.log(details_span);
-    console.log(initial_time);
-    console.log(due_time);
-    console.log(id);
-    $.ajax({
+        if (todo_objects.data[pos_in_array].complete == 0) {
+            is_complete = false;
+        } else if (todo_objects.data[pos_in_array].complete == 1) {
+            is_complete = true;
+        }
+        var details_span = '#details_span' + $(this)[0].attributes.index_id.value;
+        var initial_time = '#initial_time_span' + $(this)[0].attributes.index_id.value;
+        var due_time = '#due_time_span' + $(this)[0].attributes.index_id.value;
+        var id = $(this)[0].attributes.index_id.value;
+        console.log(details_span);
+        console.log(initial_time);
+        console.log(due_time);
+        console.log(id);
+        $.ajax({
             url: 'http://s-apis.learningfuze.com/todo/update',
             dataType: 'json',
             method: 'Post',
-            data:{  postId: id,
-                    title: 'title',
-                    dueDate: timeStamp(),
-                    details: $(details_span).text(),
-                    userId: user.id,
-                    complete: is_complete,
-                },
-            success: function(response){
+            data: {
+                postId: id,
+                title: 'title',
+                dueDate: timeStamp(),
+                details: $(details_span).text(),
+                userId: user.id,
+                complete: is_complete,
+            },
+            success: function(response) {
                 console.log('in update item');
-                console.log('response: ', response); 
+                console.log('response: ', response);
             }
+        })
     })
-})
 }
->>>>>>> 46475962af6b1d1860c6dd95c860e696cd101be2
 
 
 /*---------------------------------------------------------------------------
@@ -709,7 +580,7 @@ $(document).ready(function() {
     showCompleted();
     toggleButtons();
 
-    chrome.storage.local.get('session_id', function(items) {
+    chrome.storage.sync.get('session_id', function(items) {
         if (items != undefined) {
             $.ajax({
                 url: "http://s-apis.learningfuze.com/todo/getLoggedInUserInfo",
