@@ -84,13 +84,18 @@ function validateUser() {
                 $('#loginmodal').hide('bs.modal');
                 $('.modal-backdrop').remove();
 
-                getServerList();
+                
                 generateList();
+                getServerList(todo_objects);
+
 
 
                 chrome.storage.local.set({
                     'session_id': user.id
                 });
+                chrome.storage.local.get('session_id', function(item){
+                    console.log("this is the session id",item);
+                })
             }
         }
     });
@@ -535,19 +540,20 @@ $(document).ready(function() {
     showCompleted();
     toggleButtons();
 
-    // if (chrome.storage.local.get('session_id') != undefined) {
-    //     chrome.storage.sync.get('session_id', function(items) {
-    //         $.ajax({
-    //             url: "http://s-apis.learningfuze.com/todo/getLoggedInUserInfo",
-    //             dataType: 'json',
-    //             data: items,
-    //             method: "post",
-    //             success: function(response) {
-    //                 console.log(response);
-    //             }
-    //         });
-    //     });
-    // }
+    chrome.storage.local.get('session_id', function(items) {
+        if (items != undefined) {
+            $.ajax({
+                url: "http://s-apis.learningfuze.com/todo/getLoggedInUserInfo",
+                dataType: 'json',
+                data: items,
+                method: "post",
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+    });
+
 
 
 
@@ -610,7 +616,7 @@ $(document).ready(function() {
         var _this = $(this);
         if ($(_this).val() == 0);
         var inputKeyTimer = setTimeout(function() {
-
+            console.log("we're in")
             if (validateEmail($('#create_email').val())) {
                 validEmail = $('#create_email').val();
             }
@@ -628,10 +634,13 @@ $(document).ready(function() {
                 method: "post",
                 succcess: function(response) {
                     console.log(response);
+                    if (response.success == false) {
+                        console.log(response.errors);
+                    }
                 }
 
             })
-        }, 750);
+        }, 350);
     });
 
 
