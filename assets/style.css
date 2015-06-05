@@ -63,12 +63,12 @@ body{
 
 .login_form_button .logout_form_button
 {
-	background-color:#FF4242;
+	background-color:#FF4242 !important;
 }
 
 .login_logout_button
 {
-	background-color:#FF4242;
+	background-color:#FF4242 !important; 
 }
 
 h2

@@ -36,22 +36,31 @@ Output: success or failure message, on success: appends user information to the 
 -----------------------------------------------------------------------------*/
 
 function validateUser() {
-        username = $('#username').val();
-        $.ajax({
-            url: 'http://s-apis.learningfuze.com/todo/login',
-            dataType: 'json',
-            data: {
-                username: $('#username').val(),
-                password: $('#password').val()
-            },
-            method: 'POST',
+    $('#loginmodal').on('hide.bs.modal', function(e) {
 
-            success: function(response) {
-                window.user = response;
-                if (response.success == false) {
-                    console.log('in failure');
-                    console.log('errors: ', response.errors);
-                }
+        e.preventDefault();
+    });
+    username = $('#username').val();
+    $.ajax({
+        url: 'http://s-apis.learningfuze.com/todo/login',
+        dataType: 'json',
+        data: {
+            username: $('#username').val(),
+            password: $('#password').val()
+        },
+        method: 'POST',
+
+        success: function(response) {
+            window.user = response;
+            if (response.success == false) {
+                console.log('errors: ', response.errors);
+                $('.alert').remove();
+                var checkInputAlert = $('<div>').addClass('alert alert-danger text-left').text('Please enter valid user/password.');
+            $('.login_footer').append(checkInputAlert);
+
+            $('.user_create_btn').html("Create User");
+
+            } else {
                 var name_span = $('<span>', {
                     text: response.firstName + ' ' + response.lastName,
                     id: 'user_logged_in',
@@ -71,23 +80,29 @@ function validateUser() {
                     $('.user_info').remove()
 
                 });
+
+                $('#loginmodal').hide('bs.modal');
+                $('.modal-backdrop').remove();
+
                 getServerList();
                 generateList();
+
+
                 chrome.storage.local.set({
                     'session_id': user.id
                 });
-                chrome.storage.sync.set({'session_id': user.id});
             }
-        });
+        }
+    });
 
-    }
+}
 
-    /****************************
-    *
-    *
-    ***********************/
+/****************************
+ *
+ *
+ ***********************/
 
-    function loggedInUserInfo() {
+function loggedInUserInfo() {
 
     }
     /***************************
@@ -529,28 +544,27 @@ $(document).ready(function() {
     showCompleted();
     toggleButtons();
 
-    // if(chrome.storage.local.get('session_id') != undefined)
-    // {
-    //     chrome.storage.sync.get('session_id', function(items){
+    // if (chrome.storage.local.get('session_id') != undefined) {
+    //     chrome.storage.sync.get('session_id', function(items) {
     //         $.ajax({
     //             url: "http://s-apis.learningfuze.com/todo/getLoggedInUserInfo",
     //             dataType: 'json',
     //             data: items,
     //             method: "post",
-    //             success: function(response){
+    //             success: function(response) {
     //                 console.log(response);
     //             }
     //         });
     //     });
     // }
 
-    
+
 
 
     //When the login button is selected the correct forms are reset
     //The correct function on the form is called depending on which form is displayed
     $('.login_submit_button').click(function() {
-
+         $('.alert').remove();
         if ($('.user_login').css('display') == 'none') {
 
             create_account();
@@ -575,7 +589,7 @@ $(document).ready(function() {
     //on user create button press the text of the button is changed
     //and the appropriate form is toggled to the screen
     $('.user_create_btn').click(function() {
-
+         $('.alert').remove();
         if ($('.user_create_btn').html() == "Create User") {
 
             $('.user_create_btn').html("Login");
