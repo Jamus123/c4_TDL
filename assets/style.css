@@ -1,13 +1,13 @@
-.task_details{
-	border: 1px solid black;
-}
+
 
 .task_details{
 	display: none;
+	
 }
 
 .shown_task_details{
 	display:inline-block;
+	border: 1px solid black;
 }
 
 .task_completed_container{

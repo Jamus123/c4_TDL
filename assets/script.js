@@ -99,18 +99,18 @@ Output: response, an array of task objects
                 applyPastDue();
                 sortByPastDue();
                 markByPastDue();
-                generateList(todo_objects);
-                $('.task_list_container').on('click', '.task_entry', function() {
-                    console.log('in reveal task handler')
-                    console.log('this: ' + $(this));
+               
+                 $('.task_list').click(function(){
 
-                    var current_index = $(this).attr('index_id');
-                    var target_id = '#task_details' + current_index;
 
-                    console.log('this: ' + $(this).attr('index_id'));
-                    $(target_id).toggleClass('shown_task_details');
-                    console.log("UserId =", user.id);
-                });
+
+                    console.log('this: ', $(this));
+                    console.log("clicked");
+                    var target_id = $(this).attr('index_id');
+                    console.log(target_id);
+                    var target_details = '#task_details'+ target_id;
+                    $(target_details).toggleClass('shown_task_details');
+                })
 
             } 
 
@@ -146,19 +146,34 @@ Output: none
 -----------------------------------------------------------------------------*/  
 
     function taskComplete() {
+        var current_index;
         console.log('in taskComplete function');
         $('.task_list_container').on('click', '.completed_task', function() {
             console.log('id of this: ', $(this));
 
-            var current_index = $(this).attr('index_id');
+            current_index = $(this).attr('index_id');
             var target_id = '#task' + current_index;
+            
 
 
             console.log('this: ' + $(this).attr('index_id'));
             $(target_id).addClass('task_details')
             $('.task_completed_container').append($(target_id));
-
+            console.log('current index: ', current_index);
+            $.ajax({
+                            url:'http://s-apis.learningfuze.com/todo/updateCompleteStatus',
+                            method: 'Post',
+                            dataType: 'json',
+                            data: {postId: current_index, complete:1},
+                            success: function(response){
+                                console.log('current_index: ', current_index)
+                                console.log('updating task complete information');
+                                console.log(response);
+                            }
+                    })
         })
+
+        
     }
 /*---------------------------------------------------------------------------
 Function: showCompleted()
@@ -190,6 +205,7 @@ Output: Dom elements
             var task_list_entry = $('<div>', {
                 class: 'task_list col-xs-12',
                 id: 'task' + todo_object_arr.data[i].id,
+                index_id: todo_object_arr.data[i].id,
             });
             var task_title = $('<li>', {
                 text: todo_object_arr.data[i].title,
@@ -200,7 +216,9 @@ Output: Dom elements
             var edit_button = $('<button>', {
                 text: '',
                 type: 'button',
-                class: 'col-xs-1 col-sm-offset-1 edit_task glyphicon glyphicon-th-list',
+
+                class: 'col-xs-1 col-sm-offset-1 edit_task',
+                index_id: todo_object_arr.data[i].id,
 
             });
             var delete_button = $('<button>', {
@@ -394,6 +412,28 @@ function markByPastDue(){
         }
     }
 }
+
+/*---------------------------------------------------------------------------
+Function: 
+Purpose: 
+Input: 
+Output: 
+-----------------------------------------------------------------------------*/  
+// function completeItem(){
+//     $.ajax({
+//             url: 'http://s-apis.learningfuze.com/todo/update',
+//             dataType: 'json',
+//             method: 'Post',
+//             data:{  postId: $(this).attr(index_id),
+//                     title: 
+//                     dueDate: string - any valid date format as specified in the PHP strtotime specs
+//                     details: string - todo list details
+//                     userId: number - Users ID
+//                     complete: boolean - whether the task has been completed or not}
+//     })
+// }
+
+
 
 
 
