@@ -78,14 +78,31 @@ function validateUser() {
 
 }
 
+/***************************
+* FUNCTION:
+* PURPOSE:
+* INPUT:
+* OUTPUT:
+*********************************/
+// function create_account() {
+//     $.ajax({
+//         url: "http://s-apis.learningfuze.com/todo/newAccount",
+//         dataType: "json",
+//         method: "post",
+//         data: {
+//             username: $('')
+//         }
+
+//     });
+
+// }
+
 /*---------------------------------------------------------------------------
 Function: getServerList()
 Purpose: task information from the server. task information is an array of objects.
 Input: none 
 Output: response, an array of task objects
 -----------------------------------------------------------------------------*/
-
-
 
 function getServerList() {
     console.log('in getServerList function');
@@ -199,8 +216,8 @@ function taskComplete() {
                     console.log('updating task complete information');
                     console.log(response);
                 }
-            })
-        })
+            });
+        });
 
 
     }
@@ -335,12 +352,12 @@ function createTask() {
         $('#new_title').val(null);
         $('#new_details').val(null);
     }
-    /*---------------------------------------------------------------------------
-    Function: timeStamp()
-    Purpose: Creates new timeStamp to apply to the new task object. 
-    Input:none
-    Output: timeStamp to add to the object.
-    -----------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------
+Function: timeStamp()
+ Purpose: Creates new timeStamp to apply to the new task object. 
+ Input:none
+ Output: timeStamp to add to the object.
+-----------------------------------------------------------------------------*/
 function timeStamp() {
     // Create a date object with the current time
     var now = new Date();
