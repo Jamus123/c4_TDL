@@ -56,9 +56,9 @@ function validateUser() {
                 console.log('errors: ', response.errors);
                 $('.alert').remove();
                 var checkInputAlert = $('<div>').addClass('alert alert-danger text-left').text('Please enter valid user/password.');
-            $('.login_footer').append(checkInputAlert);
+                $('.login_footer').append(checkInputAlert);
 
-            $('.user_create_btn').html("Create User");
+                $('.user_create_btn').html("Create User");
 
             } else {
                 var name_span = $('<span>', {
@@ -103,15 +103,6 @@ function validateUser() {
  ***********************/
 
 function loggedInUserInfo() {
-
-    }
-    /***************************
-     * FUNCTION
-     * PURPOSE:
-     * INPUT:
-     * RETURNS:
-     *******************************/
-function validateUserCreate() {
 
 }
 
@@ -564,7 +555,7 @@ $(document).ready(function() {
     //When the login button is selected the correct forms are reset
     //The correct function on the form is called depending on which form is displayed
     $('.login_submit_button').click(function() {
-         $('.alert').remove();
+        $('.alert').remove();
         if ($('.user_login').css('display') == 'none') {
 
             create_account();
@@ -589,7 +580,7 @@ $(document).ready(function() {
     //on user create button press the text of the button is changed
     //and the appropriate form is toggled to the screen
     $('.user_create_btn').click(function() {
-         $('.alert').remove();
+        $('.alert').remove();
         if ($('.user_create_btn').html() == "Create User") {
 
             $('.user_create_btn').html("Login");
@@ -607,6 +598,40 @@ $(document).ready(function() {
         $('#username').val('');
         $('#password').val('');
 
+    });
+
+
+    //Large event listener function for checking valid user info
+    //before creating a user account
+    $('.create_form').on('keyup', function() {
+        if (inputKeyTimer != null) {
+            clearInterval(inputKeyTimer);
+        }
+        var _this = $(this);
+        if ($(_this).val() == 0);
+        var inputKeyTimer = setTimeout(function() {
+
+            if (validateEmail($('#create_email').val())) {
+                validEmail = $('#create_email').val();
+            }
+            $.ajax({
+                data: {
+                    username: $('#create_username').val(),
+                    password: $('#create_password').val(),
+                    password2: $('#create_password').val(),
+                    email: validEmail,
+                    firstName: $('#create_firstName').val(),
+                    lastName: $('#create_lastName').val()
+                },
+                dataType: 'json',
+                url: "http://s-apis.learningfuze.com/todo/validateUserInfo",
+                method: "post",
+                succcess: function(response) {
+                    console.log(response);
+                }
+
+            })
+        }, 750);
     });
 
 
