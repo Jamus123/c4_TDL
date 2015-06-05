@@ -66,6 +66,7 @@ Output: success or failure message, on success: appends user information to the 
 
                     })
                     getServerList();
+                    
                 }
             
 
@@ -101,7 +102,7 @@ Output: response, an array of task objects
                 sortByPastDue();
                 markByPastDue();
                
-                 $('.task_list').click(function(){
+                 $('.task_entry').click(function(){
 
 
                     console.log('this: ', $(this));
@@ -110,6 +111,7 @@ Output: response, an array of task objects
                     console.log(target_id);
                     var target_details = '#task_details'+ target_id;
                     $(target_details).toggleClass('shown_task_details');
+                    updateItem();
                 })
 
             } 
@@ -146,13 +148,22 @@ Output: none
 
     function taskComplete() {
         var current_index;
+        var compl_val;
+
         console.log('in taskComplete function');
         $('.task_list_container').on('click', '.completed_task', function() {
+
+
             console.log('id of this: ', $(this));
 
             current_index = $(this).attr('index_id');
             var target_id = '#task' + current_index;
-            
+                // for(var i=0; i<todo_objects.data.length; i++){
+                //     if(todo_objects.data[i].complete == 1){
+                        
+                //         return;
+                //     }
+                // }
 
 
             console.log('this: ' + $(this).attr('index_id'));
@@ -163,7 +174,7 @@ Output: none
                             url:'http://s-apis.learningfuze.com/todo/updateCompleteStatus',
                             method: 'Post',
                             dataType: 'json',
-                            data: {postId: current_index, complete:1},
+                            data: {postId: current_index, complete:compl_val},
                             success: function(response){
                                 console.log('current_index: ', current_index)
                                 console.log('updating task complete information');
@@ -246,6 +257,7 @@ Output: Dom elements
             var details_span = $('<span>', {
                 text: todo_object_arr.data[i].details,
                 class: 'col-xs-6',
+                id: 'details_span'+ todo_object_arr.data[i].id,
                 contenteditable: 'true',
 
             });
@@ -253,12 +265,14 @@ Output: Dom elements
             var initial_time = $('<span>', {
                 text: 'Made: ' + todo_object_arr.data[i].timeStamp,
                 class: 'col-xs-2 col-xs-offset-1',
+                id: 'initial_time_span'+ todo_object_arr.data[i].id,
                 contenteditable: 'true',
             });
 
             var due_time = $('<span>', {
                 text: 'Due: time_due',
                 class: 'col-xs-2 col-xs-offset-1',
+                id: 'due_time_span'+ todo_object_arr.data[i].id,
                 contenteditable: 'true',
             });
 
@@ -421,19 +435,44 @@ Purpose:
 Input: 
 Output: 
 -----------------------------------------------------------------------------*/  
-// function completeItem(){
-//     $.ajax({
-//             url: 'http://s-apis.learningfuze.com/todo/update',
-//             dataType: 'json',
-//             method: 'Post',
-//             data:{  postId: $(this).attr(index_id),
-//                     title: 
-//                     dueDate: string - any valid date format as specified in the PHP strtotime specs
-//                     details: string - todo list details
-//                     userId: number - Users ID
-//                     complete: boolean - whether the task has been completed or not}
-//     })
-// }
+function updateItem(){
+    console.log('in update item')
+    $('.edit_task').click(function(){
+        console.log('in edit button');
+
+
+    var pos_in_array;
+    var is_complete;
+
+    for(var i=0; i<todo_objects.data.length; i++){
+        console.log('this: ', $(this)[0].attributes.index_id.value);
+        if(todo_objects.data[i].id == $(this)[0].attributes.index_id.value){
+            pos_in_array = i;
+        }
+    }
+
+    if(todo_objects.data[pos_in_array].complete == 0){
+        is_complete = false;
+    } else if(todo_objects.data[pos_in_array].complete == 1){
+        is_complete = true;
+    }
+    var details_span = '#details_span'+$(this)[0].attributes.index_id.value;
+    var initial_time = '#initial_time_span'+$(this)[0].attributes.index_id.value;
+    var due_time = '#due_time_span'+$(this)[0].attributes.index_id.value;
+    $.ajax({
+            url: 'http://s-apis.learningfuze.com/todo/update',
+            dataType: 'json',
+            method: 'Post',
+            data:{  postId: $(this)[0].attributes.index_id.value,
+                    title: 'title',
+                    dueDate: $(due_time),
+                    details: $(details_span),
+                    userId: user.id,
+                    complete: is_complete,
+                }
+    })
+})
+}
 
 
 
