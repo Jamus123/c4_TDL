@@ -72,8 +72,6 @@ function validateUser() {
         }
 
     });
-    $('#username').empty();
-    $('#password').empty();
 
 }
 
@@ -103,12 +101,13 @@ function create_account() {
         },
         success: function(response) {
             console.log(response);
-            $('.create_form').empty();
+
         }
 
 
     });
-    $('.create_form').empty();
+    $('.user_login').toggle();
+    $('.user_create').toggle();
 
 
 }
@@ -501,41 +500,59 @@ Output: none
 
 $(document).ready(function() {
 
-    taskComplete();
-    deleteTask();
-    showCompleted();
-    toggleButtons();
+taskComplete();
+deleteTask();
+showCompleted();
+toggleButtons();
 
-    $('.login_submit_button').click(function() {
-        // $('.user_create_btn').
-        if ($('.user_login').css('display') == 'none') {
 
-            create_account();
-            $('.user_login').toggle();
-            $('.user_create').toggle();
-        } else {
-            validateUser();
-        }
-        if ($('.user_create_btn').html() == "Create User") {
+//When the login button is selected the correct forms are reset
+//The correct function on the form is called depending on which form is displayed
+$('.login_submit_button').click(function() {
 
-            $('.user_create_btn').html("Login");
-        } else {
-            $('.user_create_btn').html("Create User");
-        }
-    });
-    $('.create_task_button').click(function() {
-        createTask();
-    });
-    $('.user_create_btn').click(function() {
+    if ($('.user_login').css('display') == 'none') {
 
-        if ($('.user_create_btn').html() == "Create User") {
-
-            $('.user_create_btn').html("Login");
-        } else {
-            $('.user_create_btn').html("Create User");
-        }
+        create_account();
         $('.user_login').toggle();
         $('.user_create').toggle();
-    });
+    } else {
+        validateUser();
+    }
+    if ($('.user_create_btn').html() == "Create User") {
+
+        $('.user_create_btn').html("Login");
+    } else {
+        $('.user_create_btn').html("Create User");
+    }
+});
+
+//calls the create task function when the add task button is clicked
+$('.create_task_button').click(function() {
+    createTask();
+});
+
+//on user create button press the text of the button is changed
+//and the appropriate form is toggled to the screen
+$('.user_create_btn').click(function() {
+
+    if ($('.user_create_btn').html() == "Create User") {
+
+        $('.user_create_btn').html("Login");
+    } else {
+        $('.user_create_btn').html("Create User");
+    }
+    $('.user_login').toggle();
+    $('.user_create').toggle();
+});
+
+
+//used to clear inputs on the bootstrap modal hidden event
+$('#loginmodal').on('hidden.bs.modal', function() {
+    $('.create_form').val('');
+        $('#username').val('');
+    $('#password').val('');
+
+});
+
 
 });
