@@ -79,11 +79,11 @@ function validateUser() {
 }
 
 /***************************
-* FUNCTION:
-* PURPOSE:
-* INPUT:
-* OUTPUT:
-*********************************/
+ * FUNCTION:
+ * PURPOSE:
+ * INPUT:
+ * OUTPUT:
+ *********************************/
 // function create_account() {
 //     $.ajax({
 //         url: "http://s-apis.learningfuze.com/todo/newAccount",
@@ -172,7 +172,7 @@ function deleteTask() {
                     postId: current_index,
                     userId: user.id
                 },
-                success: function(response){
+                success: function(response) {
                     console.log(response);
                 }
             });
@@ -352,12 +352,12 @@ function createTask() {
         $('#new_title').val(null);
         $('#new_details').val(null);
     }
-/*---------------------------------------------------------------------------
-Function: timeStamp()
- Purpose: Creates new timeStamp to apply to the new task object. 
- Input:none
- Output: timeStamp to add to the object.
------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------
+    Function: timeStamp()
+     Purpose: Creates new timeStamp to apply to the new task object. 
+     Input:none
+     Output: timeStamp to add to the object.
+    -----------------------------------------------------------------------------*/
 function timeStamp() {
     // Create a date object with the current time
     var now = new Date();
@@ -500,10 +500,23 @@ $(document).ready(function() {
 
     $('.login_submit_button').click(function() {
         console.log('in login submit handler');
-        validateUser();
+        if ($('.user_login').css('display') === 'none') {
+            validateUser();
+        }
+        else
+        {
+            // create_account();
+        }
     })
     $('.create_task_button').click(function() {
         createTask();
+    });
+    $('.user_create_btn').click(function() {
+
+        $('.user_login').toggle();
+        $('.user_create').toggle();
+
+
     });
 
 });
