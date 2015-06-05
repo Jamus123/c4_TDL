@@ -9,7 +9,6 @@ Return: return message.
 
 
 function logOut() {
-    console.log('in logout function');
     $.ajax({
         url: 'http://s-apis.learningfuze.com/todo/logout',
         data: {
@@ -33,7 +32,6 @@ Output: success or failure message, on success: appends user information to the 
 -----------------------------------------------------------------------------*/
 
 function validateUser() {
-    console.log('in validateUser function');
     username = $('#username').val();
     $.ajax({
         url: 'http://s-apis.learningfuze.com/todo/login',
@@ -65,7 +63,6 @@ function validateUser() {
             getServerList();
             console.log('response: ', response);
             $('#logout_btn').click(function() {
-                console.log('in logout btn click handler');
                 logOut();
                 $('.user_info').remove()
 
@@ -75,6 +72,8 @@ function validateUser() {
         }
 
     });
+    $('#username').empty();
+    $('#password').empty();
 
 }
 
@@ -84,18 +83,35 @@ function validateUser() {
  * INPUT:
  * OUTPUT:
  *********************************/
-// function create_account() {
-//     $.ajax({
-//         url: "http://s-apis.learningfuze.com/todo/newAccount",
-//         dataType: "json",
-//         method: "post",
-//         data: {
-//             username: $('')
-//         }
+function create_account() {
 
-//     });
+    if (validateEmail($('#create_email').val())) {
+        validEmail = $('#create_email').val();
+    }
 
-// }
+    $.ajax({
+        url: "http://s-apis.learningfuze.com/todo/newAccount",
+        dataType: "json",
+        method: "post",
+        data: {
+            username: $('#create_username').val(),
+            password: $('#create_password').val(),
+            password2: $('#create_password').val(),
+            email: validEmail,
+            firstName: $('#create_firstName').val(),
+            lastName: $('#create_lastName').val()
+        },
+        success: function(response) {
+            console.log(response);
+            $('.create_form').empty();
+        }
+
+
+    });
+    $('.create_form').empty();
+
+
+}
 
 /*---------------------------------------------------------------------------
 Function: getServerList()
@@ -105,8 +121,7 @@ Output: response, an array of task objects
 -----------------------------------------------------------------------------*/
 
 function getServerList() {
-    console.log('in getServerList function');
-    console.log('userid: ', user.id)
+
     $.ajax({
 
         url: 'http://s-apis.learningfuze.com/todo/get',
@@ -127,15 +142,13 @@ function getServerList() {
 
             $('.task_list').click(function() {
 
-
-
                 console.log('this: ', $(this));
-                console.log("clicked");
+
                 var target_id = $(this).attr('index_id');
                 console.log(target_id);
                 var target_details = '#task_details' + target_id;
                 $(target_details).toggleClass('shown_task_details');
-            })
+            });
 
         }
 
@@ -151,18 +164,15 @@ Output: none
 -----------------------------------------------------------------------------*/
 function deleteTask() {
 
-        console.log('in deleteTask')
         $('.task_list_container').on('click', '.delete_task', function() {
-            console.log('id of this: ', $(this));
+
 
             var current_index = $(this).attr('index_id');
             var target_id = '#task' + current_index;
 
-            console.log('this: ' + $(this).attr('index_id'));
             $(target_id).remove();
             current_index = parseInt(current_index);
-            console.log("user id", user.id);
-            console.log("current_index", current_index);
+
 
             $.ajax({
                 url: "http://s-apis.learningfuze.com/todo/delete",
@@ -190,7 +200,7 @@ function deleteTask() {
 
 function taskComplete() {
         var current_index;
-        console.log('in taskComplete function');
+
         $('.task_list_container').on('click', '.completed_task', function() {
             console.log('id of this: ', $(this));
 
@@ -199,10 +209,10 @@ function taskComplete() {
 
 
 
-            console.log('this: ' + $(this).attr('index_id'));
+
             $(target_id).addClass('task_details')
             $('.task_completed_container').append($(target_id));
-            console.log('current index: ', current_index);
+
             $.ajax({
                 url: 'http://s-apis.learningfuze.com/todo/updateCompleteStatus',
                 method: 'Post',
@@ -228,7 +238,7 @@ function taskComplete() {
     Output: None
     -----------------------------------------------------------------------------*/
 function showCompleted() {
-        console.log('in showCompleted');
+
         $('.task_completed_container').click(function() {
             $('.task_list').toggleClass('shown_task_details');
         })
@@ -241,10 +251,6 @@ function showCompleted() {
     -----------------------------------------------------------------------------*/
 function generateList(todo_object_arr) {
 
-
-    console.log('in generateList');
-    console.log('todo_object_arr: ', todo_object_arr);
-    console.log('todo_object_arr.length: ', todo_object_arr.data.length)
     for (var i = 0; i < todo_object_arr.data.length; i++) {
         console.log('in for loop: ', i);
         console.log('in for loop');
@@ -329,7 +335,7 @@ Input: None
 Output: New dom elements and new object in the object array.
 -----------------------------------------------------------------------------*/
 function createTask() {
-        console.log('in createTask function');
+
         $.ajax({
             url: 'http://s-apis.learningfuze.com/todo/create',
             dataType: 'json',
@@ -398,12 +404,18 @@ Output:
 -----------------------------------------------------------------------------*/
 function toggleButtons() {
     $('.login_logout_container').click(function() {
-        console.log('in login_logout click handler')
+
         $('.login_logout_btn').toggleClass('clicked_btn')
-    })
+    });
 
 }
 
+//http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
+function validateEmail(email) {
+
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
 
 /*---------------------------------------------------------------------------
 Function: 
@@ -412,9 +424,8 @@ Input:
 Output: 
 -----------------------------------------------------------------------------*/
 function applyPastDue() {
-    console.log('in past due');
     for (var i = 0; i < todo_objects.data.length; i++) {
-        console.log('todo_objects.data: ', todo_objects.data);
+
         if (todo_objects.data[i].timeStamp > timeStamp()) {
             todo_objects.data[i].pastDue = true;
         } else if (todo_objects.data[i].timeStamp < timeStamp()) {
@@ -430,7 +441,7 @@ Input:
 Output: 
 -----------------------------------------------------------------------------*/
 function sortByPastDue() {
-    console.log('sortAndMarkByPastDue');
+
     for (var i = 1; i < todo_objects.data.length; i++) {
         if (todo_objects.data[i].pastDue < todo_objects.data[i - 1].pastDue) {
             var more = todo_objects.data[i - 1];
@@ -441,20 +452,20 @@ function sortByPastDue() {
             i = 0;
         }
     }
-    console.log(todo_objects);
+
     $('.task_list').remove();
     generateList(todo_objects);
 }
 
 
 function markByPastDue() {
-    console.log('in markByPastDue')
+
     for (var i = 0; i < todo_objects.data.length; i++) {
         if (todo_objects.data[i].pastDue) {
             var target_div = '#task' + todo_objects.data[i].id;
-            console.log('target_div: ', target_div);
+
             $(target_div).removeClass('col-xs-12').addClass('col-xs-10 col-xs-offset-2');
-            console.log($(target_div));
+
         }
     }
 }
@@ -480,9 +491,6 @@ Output:
 // }
 
 
-
-
-
 /*---------------------------------------------------------------------------
 Function: document.ready
 Purpose: On load creates the list of objects from the server. And creates the click handlers via getServerList(), taskComplete(), deleteTask(), and showCompleted()
@@ -499,24 +507,35 @@ $(document).ready(function() {
     toggleButtons();
 
     $('.login_submit_button').click(function() {
-        console.log('in login submit handler');
-        if ($('.user_login').css('display') === 'none') {
+        // $('.user_create_btn').
+        if ($('.user_login').css('display') == 'none') {
+
+            create_account();
+            $('.user_login').toggle();
+            $('.user_create').toggle();
+        } else {
             validateUser();
         }
-        else
-        {
-            // create_account();
+        if ($('.user_create_btn').html() == "Create User") {
+
+            $('.user_create_btn').html("Login");
+        } else {
+            $('.user_create_btn').html("Create User");
         }
-    })
+    });
     $('.create_task_button').click(function() {
         createTask();
     });
     $('.user_create_btn').click(function() {
 
+        if ($('.user_create_btn').html() == "Create User") {
+
+            $('.user_create_btn').html("Login");
+        } else {
+            $('.user_create_btn').html("Create User");
+        }
         $('.user_login').toggle();
         $('.user_create').toggle();
-
-
     });
 
 });

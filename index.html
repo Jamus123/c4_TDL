@@ -18,42 +18,41 @@
             <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Login Info</h4>
-                    </div>
                     <div class="modal-body user_login">
                         <!-- Form body -->
                         <form role="form">
+                        <h3> User Login <h3>
                             <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="username" class="form-control" id="username" placeholder="username">
+                                
+                                <input type="username" class="form-control" id="username" placeholder="Username">
                             </div>
                             <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" class="form-control" id="password" placeholder="password">
+                                
+                                <input type="password" class="form-control" id="password" placeholder="Password">
                             </div>
                         </form>
                     </div>
                     <div class="modal-body user_create">
                         <form role="form">
-                        <h3> Create A User <h3>
+                        <h3>Create A User<h3>
                             <div class="form-group">
-                                <input type="username" class="form-control" id="create_username" placeholder="Enter Username">
+                                <input type="username" class="form-control create_form" id="create_username" placeholder="Enter Username">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="create_password" placeholder="Create Password">
+                                <input type="password" class="form-control create_form" id="create_password" placeholder="Create Password">
                             </div>
                             <div class="form-group">
-                                <input type="firstName" class="form-control" id="create_firstName" placeholder="First Name">
+                                <input type="password" class="form-control create_form" id="create_password2" placeholder="Verify Password">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="create_password2" placeholder="Verify Password">
+                                <input type="firstName" class="form-control create_form" id="create_firstName" placeholder="First Name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="lastName" class="form-control create_form" id="create_lastName" placeholder="Last Name">
                             </div>
                             <div class="form-group">
-                                <input type="lastName" class="form-control" id="create_lastName" placeholder="Last Name">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control" id="create_email" placeholder="Enter Email">
+                                <input type="email" class="form-control create_form" id="create_email" placeholder="Enter Email">
                             </div>
                         </form>
                     </div>
@@ -111,8 +110,8 @@
                     <div>
                         <ul class="nav navbar-nav col-xs-6">
                             <li>
-                                <button type='button' class='login_logout_btn btn btn-xs clicked_btn login_form_button' data-toggle="modal" id='logout_btn'>Logout</button>
-                                <button type='button' class="login_logout_btn btn btn-xs login_form_button" data-toggle="modal" data-target="#myModal">Login Form</button>
+                                <button type='button' class='login_logout_btn btn btn-xs  login_form_button clicked_btn' data-toggle="modal" id='logout_btn'>Logout</button>
+                                <button type='button' class="login_logout_btn btn btn-xs login_form_button " data-toggle="modal" data-target="#myModal">Login Form</button>
                             </li>
                             <li>
                                 <button data-toggle="modal" href="#addTask" class="btn btn-xs col-xs-1 add_task_button">Add Task</button>
