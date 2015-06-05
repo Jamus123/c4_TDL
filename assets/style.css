@@ -16,7 +16,7 @@
 
 
 .add-button{
-	font-size: 30px;
+
 	border-style: none;
 }
 .todo-label{
@@ -51,24 +51,18 @@ body{
 .add_task_button
 {
 	background-color:#FF4242;
-	width:75px;
+	
 }
 
 .add_task_button
 {
-	float:left;
-	position:relative;
+
 	background-color:#D4EE5E;
 }
 
-.login_form_button .logout_form_button
+.login_logout_btn
 {
-	background-color:#FF4242 !important;
-}
-
-.login_logout_button
-{
-	background-color:#FF4242 !important; 
+	background-color:#FF4242 ; 
 }
 
 h2
@@ -80,10 +74,3 @@ h2
 .user_create {
 	display:none;
 }
-
-.navbar-default div.navbar-collapse
-{
-    border-top:none;
-    box-shadow:none;
-}
-
