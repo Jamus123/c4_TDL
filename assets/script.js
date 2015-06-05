@@ -459,17 +459,26 @@ function updateItem(){
     var details_span = '#details_span'+$(this)[0].attributes.index_id.value;
     var initial_time = '#initial_time_span'+$(this)[0].attributes.index_id.value;
     var due_time = '#due_time_span'+$(this)[0].attributes.index_id.value;
+    var id = $(this)[0].attributes.index_id.value;
+    console.log(details_span);
+    console.log(initial_time);
+    console.log(due_time);
+    console.log(id);
     $.ajax({
             url: 'http://s-apis.learningfuze.com/todo/update',
             dataType: 'json',
             method: 'Post',
-            data:{  postId: $(this)[0].attributes.index_id.value,
+            data:{  postId: id,
                     title: 'title',
-                    dueDate: $(due_time),
-                    details: $(details_span),
+                    dueDate: timeStamp(),
+                    details: $(details_span).text(),
                     userId: user.id,
                     complete: is_complete,
-                }
+                },
+            success: function(response){
+                console.log('in update item');
+                console.log('response: ', response); 
+            }
     })
 })
 }
