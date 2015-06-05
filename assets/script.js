@@ -66,6 +66,7 @@ Output: success or failure message, on success: appends user information to the 
                     });
                     getServerList();
                     generateList();
+                }
 
         });
 
@@ -335,7 +336,7 @@ function toggleButtons(){
     $('.login_logout_container').click(function(){
         console.log('in login_logout click handler')
         $('.login_logout_btn').toggleClass('clicked_btn')
-    });
+    })
 
 }
 
@@ -420,4 +421,3 @@ Output: none
         });
 
     });
-
