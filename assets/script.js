@@ -1,5 +1,5 @@
 var username;
-
+var validEmail;
 /*---------------------------------------------------------------------------
 Function: logOut()
 Purpose: Logs out user by sending logged in session_id to server.
@@ -20,7 +20,10 @@ function logOut() {
             console.log('in logout: ', response);
             $('.task_list').remove();
         }
-    })
+    });  
+
+        $('.user_create_btn').html("Create User");
+    
 
 }
 
@@ -76,10 +79,10 @@ function validateUser() {
 }
 
 /***************************
- * FUNCTION:
- * PURPOSE:
- * INPUT:
- * OUTPUT:
+ * FUNCTION 
+ * PURPOSE: Create a user on the database, Checks for a valid email
+ * INPUT: N/A
+ * RETURNS: Nothing (response is logged to console)
  *********************************/
 function create_account() {
 
@@ -108,8 +111,6 @@ function create_account() {
     });
     $('.user_login').toggle();
     $('.user_create').toggle();
-
-
 }
 
 /*---------------------------------------------------------------------------
