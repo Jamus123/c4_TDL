@@ -20,10 +20,11 @@ function logOut() {
             console.log('in logout: ', response);
             $('.task_list').remove();
         }
-    });  
+    });
 
-        $('.user_create_btn').html("Create User");
-    
+    $('.user_create_btn').html("Create User");
+    chrome.storage.clear();
+
 
 }
 
@@ -35,46 +36,67 @@ Output: success or failure message, on success: appends user information to the 
 -----------------------------------------------------------------------------*/
 
 function validateUser() {
-    username = $('#username').val();
-    $.ajax({
-        url: 'http://s-apis.learningfuze.com/todo/login',
-        dataType: 'json',
-        data: {
-            username: $('#username').val(),
-            password: $('#password').val()
-        },
-        method: 'POST',
+        username = $('#username').val();
+        $.ajax({
+            url: 'http://s-apis.learningfuze.com/todo/login',
+            dataType: 'json',
+            data: {
+                username: $('#username').val(),
+                password: $('#password').val()
+            },
+            method: 'POST',
 
-        success: function(response) {
-            window.user = response;
-            if (response.success == false) {
-                console.log('in failure');
-                console.log('errors: ', response.errors);
+            success: function(response) {
+                window.user = response;
+                if (response.success == false) {
+                    console.log('in failure');
+                    console.log('errors: ', response.errors);
+                }
+                var name_span = $('<span>', {
+                    text: response.firstName + ' ' + response.lastName,
+                    id: 'user_logged_in',
+                    class: 'col-xs-12'
+                })
+                var email_span = $('<span>', {
+                    text: response.email,
+                    id: 'email_logged_in',
+                    class: 'col-xs-12',
+                })
+                $('.user_info').empty();
+                $('.user_info').append(name_span, email_span);
+                getServerList();
+                console.log('response: ', response);
+                $('#logout_btn').click(function() {
+                    logOut();
+                    $('.user_info').remove()
+
+                });
+                getServerList();
+                generateList();
+                chrome.storage.local.set({
+                    'session_id': user.id
+                });
+                chrome.storage.sync.set({'session_id': user.id});
             }
-            var name_span = $('<span>', {
-                text: response.firstName + ' ' + response.lastName,
-                id: 'user_logged_in',
-                class: 'col-xs-12'
-            })
-            var email_span = $('<span>', {
-                text: response.email,
-                id: 'email_logged_in',
-                class: 'col-xs-12',
-            })
-            $('.user_info').empty();
-            $('.user_info').append(name_span, email_span);
-            getServerList();
-            console.log('response: ', response);
-            $('#logout_btn').click(function() {
-                logOut();
-                $('.user_info').remove()
+        });
 
-            });
-            getServerList();
-            generateList();
-        }
+    }
 
-    });
+    /****************************
+    *
+    *
+    ***********************/
+
+    function loggedInUserInfo() {
+
+    }
+    /***************************
+     * FUNCTION
+     * PURPOSE:
+     * INPUT:
+     * RETURNS:
+     *******************************/
+function validateUserCreate() {
 
 }
 
@@ -281,10 +303,11 @@ function generateList(todo_object_arr) {
             index_id: todo_object_arr.data[i].id,
 
         });
-        var task_complete = $('<button>', {
+        var task_complete = $('<input>', {
             text: '',
-            type: 'button',
-            class: 'col-xs-1 col-sm-offset-1 completed_task glyphicon glyphicon-ok',
+            type: 'checkbox',
+            class: 'col-xs-1 col-sm-offset-1 completed_task',
+
             id: 'complete' + todo_object_arr.data[i].id,
             index_id: todo_object_arr.data[i].id,
 
@@ -501,59 +524,76 @@ Output: none
 
 $(document).ready(function() {
 
-taskComplete();
-deleteTask();
-showCompleted();
-toggleButtons();
+    taskComplete();
+    deleteTask();
+    showCompleted();
+    toggleButtons();
+
+    // if(chrome.storage.local.get('session_id') != undefined)
+    // {
+    //     chrome.storage.sync.get('session_id', function(items){
+    //         $.ajax({
+    //             url: "http://s-apis.learningfuze.com/todo/getLoggedInUserInfo",
+    //             dataType: 'json',
+    //             data: items,
+    //             method: "post",
+    //             success: function(response){
+    //                 console.log(response);
+    //             }
+    //         });
+    //     });
+    // }
+
+    
 
 
-//When the login button is selected the correct forms are reset
-//The correct function on the form is called depending on which form is displayed
-$('.login_submit_button').click(function() {
+    //When the login button is selected the correct forms are reset
+    //The correct function on the form is called depending on which form is displayed
+    $('.login_submit_button').click(function() {
 
-    if ($('.user_login').css('display') == 'none') {
+        if ($('.user_login').css('display') == 'none') {
 
-        create_account();
+            create_account();
+            $('.user_login').toggle();
+            $('.user_create').toggle();
+        } else {
+            validateUser();
+        }
+        if ($('.user_create_btn').html() == "Create User") {
+
+            $('.user_create_btn').html("Login");
+        } else {
+            $('.user_create_btn').html("Create User");
+        }
+    });
+
+    //calls the create task function when the add task button is clicked
+    $('.create_task_button').click(function() {
+        createTask();
+    });
+
+    //on user create button press the text of the button is changed
+    //and the appropriate form is toggled to the screen
+    $('.user_create_btn').click(function() {
+
+        if ($('.user_create_btn').html() == "Create User") {
+
+            $('.user_create_btn').html("Login");
+        } else {
+            $('.user_create_btn').html("Create User");
+        }
         $('.user_login').toggle();
         $('.user_create').toggle();
-    } else {
-        validateUser();
-    }
-    if ($('.user_create_btn').html() == "Create User") {
-
-        $('.user_create_btn').html("Login");
-    } else {
-        $('.user_create_btn').html("Create User");
-    }
-});
-
-//calls the create task function when the add task button is clicked
-$('.create_task_button').click(function() {
-    createTask();
-});
-
-//on user create button press the text of the button is changed
-//and the appropriate form is toggled to the screen
-$('.user_create_btn').click(function() {
-
-    if ($('.user_create_btn').html() == "Create User") {
-
-        $('.user_create_btn').html("Login");
-    } else {
-        $('.user_create_btn').html("Create User");
-    }
-    $('.user_login').toggle();
-    $('.user_create').toggle();
-});
+    });
 
 
-//used to clear inputs on the bootstrap modal hidden event
-$('#loginmodal').on('hidden.bs.modal', function() {
-    $('.create_form').val('');
+    //used to clear inputs on the bootstrap modal hidden event
+    $('#loginmodal').on('hidden.bs.modal', function() {
+        $('.create_form').val('');
         $('#username').val('');
-    $('#password').val('');
+        $('#password').val('');
 
-});
+    });
 
 
 });
