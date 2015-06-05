@@ -2,11 +2,12 @@
 
 .task_details{
 	display: none;
-	border: 1px solid black;
+	
 }
 
 .shown_task_details{
 	display:inline-block;
+	border: 1px solid black;
 }
 
 .task_completed_container{
