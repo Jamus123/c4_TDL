@@ -4,5 +4,5 @@ This project used jQuery, and AJAX to connect to already coded back-end which al
 
 The code base for this project can be found at https://github.com/LandedE/c4_TDL which is one of my group members repositories.
 
-Please refer to my commit history from June 2nd to June 5th to see examples of the project that I manage.
+Please refer to my commit history from June 2nd to June 5th to see examples of the project that I managed.
 
